@@ -28,8 +28,7 @@
      -->
     <el-card class="users-Content">
       <el-table :data="userList" style="width: 100%" :table-layout="'fixed'">
-        <el-table-column prop="name" label="姓名"/>
-        <el-table-column prop="nickname" label="昵称"/>
+        <el-table-column prop="username" label="姓名"/>
         <el-table-column label="操作">
           <template #default="scope">
             <el-button type="primary" @click="editRow(scope.row)">编辑</el-button>
@@ -161,7 +160,6 @@ export default {
         user_id: "",
         username: "",
         nickname: "",
-
       },
       rules: {
         username: [
@@ -176,8 +174,6 @@ export default {
       },
     })
     const searchList = () => {
-      console.log(data.queryParams.page_size)
-      console.log(data.queryParams.page_index)
       userListApi(data.queryParams).then(res => {
         if (res.data) {
           data.userList = res.data.user

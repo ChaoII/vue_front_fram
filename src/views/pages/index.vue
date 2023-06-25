@@ -36,7 +36,7 @@
                   :zoom-rate="1.2"
                   :preview-src-list="[host+'/'+scope.row.pic_url]"
                   :initial-index="0"
-                  fit="cover"
+                  fit="scale"
               />
           </template>
         </el-table-column>

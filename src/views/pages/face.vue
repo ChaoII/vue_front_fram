@@ -14,8 +14,6 @@
             </el-button>
           </template>
         </el-input>
-
-
       </div>
       <el-button type="primary" @click="openAddFaceDig">新增</el-button>
       <el-button type="danger" @click="restartHandler">重启</el-button>
@@ -25,13 +23,13 @@
       <div style="overflow-y: scroll;height: calc(100vh - 200px)">
         <template v-for="(v,k) in staffs" :key="k">
           <el-card class="face-pic" shadow="hover" body-style="padding:0px">
-            <img class="image" :src="host+v.pic_url">
+            <img class="image" :src="host+'/'+v.pic_url">
             <el-row style="margin: 5px">
               <el-col :span="16">
                 <div style="">
                   <div class="time">姓名:{{ v.name }}</div>
-                  <div class="time">工号:{{ v.id }}</div>
-                  <time class="time">日期:{{ v.update_time.slice(0, 10) }}</time>
+                  <div class="time">工号:{{ v.uid }}</div>
+                  <time class="time">日期:{{ v.register_time.slice(0, 10) }}</time>
                 </div>
               </el-col>
               <el-col span="18">
@@ -42,7 +40,7 @@
                       :icon="Warning"
                       icon-color="#626AEF"
                       title="确定删除吗?"
-                      @confirm="deleteFace(v.id)"
+                      @confirm="deleteFace(v.index_id)"
                   >
                     <template #reference>
                       <el-button style="position: absolute; bottom: 0px;right: 0px" type="danger" :icon="Delete"/>
@@ -79,12 +77,11 @@
             @change="beforeUpload"
             :auto-upload="false"
         >
-          <img v-if="faceInfo.imageUrl" :src="faceInfo.imageUrl" class="avatar"/>
+          <img v-if="faceInfo.pic_url" :src="faceInfo.pic_url" class="avatar"/>
           <el-icon v-else class="avatar-uploader-icon">
             <Plus/>
           </el-icon>
         </el-upload>
-
 
         <div class="faceInfo">
           <el-form
@@ -92,26 +89,21 @@
               label-width="100px"
               :model="faceInfo"
               style="width: 300px;"
-              disabled="true"
           >
-            <el-form-item label="姓名：">
-              <el-input v-model="faceInfo.name"/>
+            <el-form-item label="姓名：" >
+              <el-input v-model="faceInfo.name" placeholder="请输入用户名"/>
             </el-form-item>
             <el-form-item label="工号：">
-              <el-input v-model="faceInfo.staff_id"/>
-            </el-form-item>
-            <el-form-item label="日期:">
-              <el-input v-model="faceInfo.update_time"/>
+              <el-input v-model="faceInfo.uid" placeholder="请输入工号"/>
             </el-form-item>
           </el-form>
         </div>
       </div>
 
-
       <template #footer>
         <div class="">
           <el-button
-              @click="dialogFormVisible = false;faceInfo.update_time='';faceInfo.name='',faceInfo.staff_id='';faceInfo.imageUrl=''">
+              @click="dialogFormVisible = false;faceInfo.register_time='';faceInfo.name='';faceInfo.uid='';faceInfo.pic_url=''">
             取消
           </el-button>
           <el-button type="primary" @click="submitAdd">确定</el-button>
@@ -150,9 +142,8 @@ export default {
       faceInfo: {
         faceFile: "",
         name: "",
-        staff_id: "",
-        update_time: "",
-        imageUrl: ""
+        uid: "",
+        pic_url: ""
       },
       staffs: [],
       total: "",
@@ -190,6 +181,8 @@ export default {
       console.log(data.faceInfo.faceFile)
       let formData = new FormData()
       formData.append('file', data.faceInfo.faceFile)
+      formData.append("name", data.faceInfo.name)
+      formData.append("uid", data.faceInfo.uid)
       const url = host + "/api/attend/addFaceLibs"
       console.log(url)
       axios({
@@ -197,7 +190,6 @@ export default {
         url: url,
         headers: {"Content-Type": "multipart/form-data", "token": store.state.uInfo.userInfo.token},
         data: formData
-
       }).then(res => {
         console.log(res.data)
         if (res.data.code !== 0) {
@@ -208,18 +200,17 @@ export default {
           data.faceInfo = {
             faceFile: "",
             name: "",
-            staff_id: "",
-            update_time: "",
-            imageUrl: ""
+            uid: "",
+            pic_url: ""
           }
           searchList()
           ElMessage.success("新增人脸成功！")
         }
       })
     }
-    const deleteFace = (staff_id) => {
+    const deleteFace = (index_id) => {
 
-      deleteFaceApi({"staff_id": staff_id}).then(
+      deleteFaceApi({"index_id": index_id}).then(
           res => {
             searchList()
             ElMessage.success("人脸删除成功！")
@@ -235,11 +226,10 @@ export default {
 
     const beforeUpload = (rawFile) => {
       data.faceInfo.faceFile = rawFile.raw
-      data.faceInfo.imageUrl = URL.createObjectURL(rawFile.raw)
-      data.faceInfo.staff_id = rawFile.raw.name.split("_")[0]
-      data.faceInfo.name = rawFile.raw.name.split("_")[1].split(".")[0]
-      data.faceInfo.update_time = formatDate(new Date(), "YYYY-mm-dd HH:MM:SS")
-
+      data.faceInfo.pic_url = URL.createObjectURL(rawFile.raw)
+      // data.faceInfo.uid = rawFile.raw.name.split("_")[0]
+      // data.faceInfo.name = rawFile.raw.name.split("_")[1].split(".")[0]
+      // data.faceInfo.register_time = formatDate(new Date(), "YYYY-mm-dd HH:MM:SS")
     }
 
 
