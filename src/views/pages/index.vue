@@ -28,6 +28,18 @@
         <el-table-column prop="staff_id" label="工号"></el-table-column>
         <el-table-column prop="name" label="姓名"></el-table-column>
         <el-table-column prop="attend_time" label="打卡时间"></el-table-column>
+        <el-table-column prop="pic_url" label="图片">
+          <template #default="scope">
+              <el-image
+                  style="width: 60px; height: 100px;"
+                  :src="host+'/'+scope.row.pic_url"
+                  :zoom-rate="1.2"
+                  :preview-src-list="[host+'/'+scope.row.pic_url]"
+                  :initial-index="0"
+                  fit="cover"
+              />
+          </template>
+        </el-table-column>
       </el-table>
       <div class="index-page">
         <el-pagination
@@ -64,7 +76,7 @@ export default {
         start_time: "",
         end_time: "",
         name: "",
-        page_size: 10,
+        page_size: 5,
         page_index: 1
       },
       tableData: [],
@@ -140,5 +152,9 @@ export default {
   position: absolute;
 }
 
+.image {
+  width: 40px;
+  height: 60px;
+}
 
 </style>
