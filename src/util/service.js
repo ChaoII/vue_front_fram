@@ -10,7 +10,6 @@ const Service = axios.create({
     baseURL: host + "/api",
     headers: {
         "Content-type": "application/json;charset=utf-8",
-        "zhuzhuxia": "zhuzhuxia",
         "token": store.state.uInfo.userInfo.token
     }
 })
@@ -55,7 +54,7 @@ export const get = config => {
     return Service({
         ...config,
         method: "get",
-        params: config.data
+        params: config.data,
     })
 }
 // put请求

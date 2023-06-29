@@ -21,11 +21,10 @@
       </dic>
     </div>
 
-
     <el-card shadow="hover" header="打卡记录" class="home-attend-info">
       <el-table class="table" :data="tableData" style="width: 100%" stripe>
         <el-table-column type="index" width="80px"/>
-        <el-table-column prop="staff_id" label="工号"></el-table-column>
+        <el-table-column prop="uid" label="工号"></el-table-column>
         <el-table-column prop="name" label="姓名"></el-table-column>
         <el-table-column prop="attend_time" label="打卡时间"></el-table-column>
         <el-table-column prop="pic_url" label="图片">

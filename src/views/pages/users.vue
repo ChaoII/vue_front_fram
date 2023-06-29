@@ -29,6 +29,7 @@
     <el-card class="users-Content">
       <el-table :data="userList" style="width: 100%" :table-layout="'fixed'">
         <el-table-column prop="username" label="姓名"/>
+        <el-table-column prop="nickname" label="昵称"/>
         <el-table-column label="操作">
           <template #default="scope">
             <el-button type="primary" @click="editRow(scope.row)">编辑</el-button>
@@ -67,13 +68,6 @@
 
     <!-- 新增弹窗 -->
     <el-dialog v-model="dialogFormVisible" title="新建用户">
-      <!--
-          表单
-          | username | 用户名称 | 不能为空 |
-          | password | 用户密码 | 不能为空 |
-          | email    | 邮箱     | 可以为空 |
-          | mobile   | 手机号   | 可以为空 |
-       -->
       <el-form
           ref="userForm"
           :model="formData"
@@ -157,7 +151,7 @@ export default {
         nickname: "",
       },
       formData2: {
-        user_id: "",
+        id:"",
         username: "",
         nickname: "",
       },
@@ -227,16 +221,16 @@ export default {
     }
     // 数据编辑
     const editRow = row => {
-      const {id, name, nickname} = row
+      const {id, username, nickname} = row
       // 展示编辑表单
       data.dialogFormEVisible = true;
-      data.formData2.username = name
+      data.formData2.username = username
       data.formData2.nickname = nickname
-      data.formData2.user_id = id
+      data.formData2.id = id
     }
     // 删除数据
     const deleteRow = row => {
-      const data = {"user_id": row.id}
+      const data = {"id": row.id}
       console.log(data)
       // eslint-disable-next-line no-unused-vars
       userDeleteApi(data).then(res => {

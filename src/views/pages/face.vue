@@ -118,7 +118,7 @@
 import {computed, onMounted, reactive, toRefs, ref} from 'vue';
 import {useStore} from 'vuex';
 import {formatAxis, formatDate} from "@/util/utils"
-import {faceListApi, deleteFaceApi, restartApi} from "@/util/request";
+import {faceListApi, deleteFaceApi, restartApi, addFaceApi} from "@/util/request";
 import {host} from "@/util/service"
 import {Delete, Warning} from '@element-plus/icons-vue'
 import axios from "axios";
@@ -183,28 +183,10 @@ export default {
       formData.append('file', data.faceInfo.faceFile)
       formData.append("name", data.faceInfo.name)
       formData.append("uid", data.faceInfo.uid)
-      const url = host + "/api/attend/addFaceLibs"
-      console.log(url)
-      axios({
-        method: "put",
-        url: url,
-        headers: {"Content-Type": "multipart/form-data", "token": store.state.uInfo.userInfo.token},
-        data: formData
-      }).then(res => {
-        console.log(res.data)
-        if (res.data.code !== 0) {
-          ElMessage.error(res.data.msg || "服务器出错")
-          // 请求出错
-        } else {
-          data.dialogFormVisible = false
-          data.faceInfo = {
-            faceFile: "",
-            name: "",
-            uid: "",
-            pic_url: ""
-          }
-          searchList()
-          ElMessage.success("新增人脸成功！")
+      addFaceApi(formData).then(res=>{
+        if(res.data){
+          data.dialogFormVisible = false;
+          searchList();
         }
       })
     }

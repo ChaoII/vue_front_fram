@@ -38,42 +38,7 @@ export const userDeleteApi = data => {
     })
 }
 
-// 获取角色
 
-
-export const getRolesApi = data => {
-    return get({
-        url: `roles`,
-        data
-    })
-}
-// 新建角色
-export const addRolesApi = data => {
-    return post({
-        url: `roles`,
-        data
-    })
-}
-// 编辑角色
-export const editRolesApi = data => {
-    return put({
-        url: `roles/${data.id}`,
-        data
-    })
-}
-
-export const rolesDeleteApi = data => {
-    return del({
-        url: `roles/${data.id}`
-    })
-}
-
-export const goodsListApi = data => {
-    return get({
-        url: `goods`,
-        data
-    })
-}
 
 export const attendInfoListApi = data => {
     login
@@ -86,6 +51,13 @@ export const attendInfoListApi = data => {
 export const faceListApi = data => {
     return get({
         url: "attend/getFaceLibraries",
+        data
+    })
+}
+
+export const addFaceApi = data => {
+    return put({
+        url: "attend/addFaceLibs",
         data
     })
 }
